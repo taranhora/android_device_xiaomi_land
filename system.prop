@@ -73,6 +73,9 @@ ro.sf.lcd_density=320
 persist.debug.wfd.enable=1
 persist.hwc.enable_vds=1
 
+# Property to enable display default color mode
+vendor.display.enable_default_color_mode=1
+
 # DRM
 drm.service.enabled=true
 
