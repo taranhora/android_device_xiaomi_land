@@ -134,6 +134,10 @@ on boot
 
     # Prevents permission denied error for telephony
     chmod 0644 /proc/cmdline
+    
+    #enable camera read sensors data
+    setprop persist.camera.gyro.disable 0
+    setprop persist.camera.stats.test 5
 
     #Remove SUID bit for iproute2 ip tool
     chmod 0755 /system/bin/ip
@@ -172,6 +176,12 @@ on boot
 
     setprop persist.sys.fp.vendor none
     start gx_fpd
+    
+    on property:persist.sys.fp.vendor=switchf
+    	setprop ro.boot.fpsensor fpc
+
+    on property:persist.sys.fp.vendor=goodix
+	    setprop ro.boot.fpsensor gdx
 
     # Notification LEDs
     chown root system /sys/class/leds/red/blink
@@ -489,6 +499,13 @@ on property:bluetooth.hciattach=true
 on property:bluetooth.hciattach=false
     setprop bluetooth.status off
 
+# FM
+on property:hw.fm.init=0
+    write /sys/module/radio_iris_transport/parameters/fmsmd_set 0
+
+on property:hw.fm.init=1
+    write /sys/module/radio_iris_transport/parameters/fmsmd_set 1
+
 service netmgrd /system/vendor/bin/netmgrd
     class main
     disabled
@@ -630,11 +647,12 @@ service gx_fpd /system/bin/gx_fpd
 on property:persist.sys.fp.vendor=switchf
     stop gx_fpd
     setprop persist.sys.fp.vendor searchf
-    setprop ro.boot.fpsensor fpc
     setprop ro.hardware.fingerprint searchf
     start fps_hal
 
 on property:persist.sys.fp.vendor=goodix
-    setprop ro.boot.fpsensor gdx
     setprop ro.hardware.fingerprint goodix
+    start fps_hal
+
+on property:persist.sys.fp.onstart=1
     start fps_hal

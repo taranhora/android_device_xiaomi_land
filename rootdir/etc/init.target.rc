@@ -47,7 +47,7 @@ on fs
     mount ext4 /dev/block/bootdevice/by-name/persist /persist noatime nosuid nodev barrier=1
     mkdir /persist/data 0700  system system
     mkdir /persist/bms 0700 root system
-    restorecon_recursive   /persist
+    restorecon_recursive /persist
 
     #write /sys/kernel/boot_adsp/boot 1
 
@@ -103,7 +103,7 @@ service perfd /system/vendor/bin/perfd
    disabled
    writepid /dev/cpuset/system-background/tasks
 
-service thermal-engine /system/vendor/bin/thermal-engine
+service thermal-engine /system/vendor/bin/thermal-engine -c ${sys.qcom.thermalcfg:-/vendor/etc/thermal-engine.conf}
    class main
    user root
    socket thermal-send-client stream 0666 system system
