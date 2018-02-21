@@ -374,7 +374,8 @@ PRODUCT_COPY_FILES += \
 
 # Snap
 PRODUCT_PACKAGES += \
-    Snap
+    Snap  \
+    Launcher3
 
 # Thermal
 PRODUCT_PACKAGES += \
